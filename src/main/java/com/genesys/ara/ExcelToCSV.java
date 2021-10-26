@@ -4,10 +4,15 @@ import com.codoid.products.exception.FilloException;
 import com.codoid.products.fillo.Connection;
 import com.codoid.products.fillo.Fillo;
 import com.codoid.products.fillo.Recordset;
+import org.pmw.tinylog.Configurator;
+import org.pmw.tinylog.Level;
 import org.pmw.tinylog.Logger;
+import org.pmw.tinylog.writers.ConsoleWriter;
+import org.pmw.tinylog.writers.FileWriter;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.Date;
 import java.util.Properties;
 
 public class ExcelToCSV {
@@ -96,7 +101,6 @@ public class ExcelToCSV {
             connection.close();
         } catch (FilloException e) {
             Logger.error(e.getMessage());
-            e.printStackTrace();
         } catch (FileNotFoundException e) {
             Logger.error("ERROR: Could not write output CSV file.");
         } catch (IOException e) {
@@ -121,7 +125,14 @@ public class ExcelToCSV {
     }
 
     public static void main(String [] args) {
+        Configurator.defaultConfig()
+                //.writer(new FileWriter(String.format(".%sExcelToCSVJava.log",File.separator)))
+                .writer(new ConsoleWriter())
+                .level(Level.INFO)
+                .formatPattern("{date: HH:mm:ss.SSS} {level}: {message}")
+                .activate();
         Logger.info("Java Excel CSV Converter 1.0.0");
+        Logger.info(String.format("Started application at: %tc",new Date()));
         if (args.length != 1) {
             Logger.info("Usage: java -jar ExcelToCSV.jar <filename.xlsx>");
         } else {
