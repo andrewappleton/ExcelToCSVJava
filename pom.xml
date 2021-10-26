@@ -19,6 +19,11 @@
             <artifactId>fillo</artifactId>
             <version>1.21</version>
         </dependency>
+        <dependency>
+            <groupId>org.tinylog</groupId>
+            <artifactId>tinylog</artifactId>
+            <version>1.3.6</version>
+        </dependency>
     </dependencies>
 
 </project>
