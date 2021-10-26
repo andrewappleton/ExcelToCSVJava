@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ExcelToCSVJava:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ExcelToCSVJava_jar</output-path>
+    <root id="archive" name="ExcelToCSVJava.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/main/java/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="ExcelToCSVJava" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/com/codoid/products/fillo/1.21/fillo-1.21.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
