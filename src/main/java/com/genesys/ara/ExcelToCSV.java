@@ -59,22 +59,22 @@ public class ExcelToCSV {
     private void convert(String excelFilename) {
         Fillo fillo = new Fillo();
         Recordset recordset = null;
-        Connection connection = null;
+        Connection connection;
         OutputStream os = null;
         OutputStreamWriter osWriter = null;
         String csvFilename = excelFilename.substring(0,excelFilename.lastIndexOf('.'))+".csv";
-        String query = "";
+        String query;
         String csvRow = "";
-        String currRecord = "";
+        String currRecord;
         int csvWriteCount = 0;
         try {
             if (!overwriteCsv && fileExists(csvFilename)) {
                 Logger.error("ERROR: CSV file exists and should not be overwritten!");
                 return;
             }
+            connection = fillo.getConnection(excelFilename);
             os = new FileOutputStream(csvFilename);
             osWriter = new OutputStreamWriter(os, StandardCharsets.UTF_8);
-            connection = fillo.getConnection(excelFilename);
             Logger.info(String.format("Found Excel file: %s",excelFilename));
             for (String table : connection.getMetaData().getTableNames()) {
                 query = String.format("select * from %s", table);
@@ -100,7 +100,7 @@ public class ExcelToCSV {
             recordset.close();
             connection.close();
         } catch (FilloException e) {
-            Logger.error(e.getMessage());
+            Logger.error("ERROR: " + e.getMessage());
         } catch (FileNotFoundException e) {
             Logger.error("ERROR: Could not write output CSV file.");
         } catch (IOException e) {
@@ -113,9 +113,11 @@ public class ExcelToCSV {
                 Logger.error("ERROR: " + e.getMessage());
             }
             try {
-                os.close();
+                if (os != null) os.close();
             } catch (IOException e) {
                 Logger.error("ERROR: " + e.getMessage());
+            } catch (NullPointerException npe) {
+                Logger.error("ERROR: " + npe.getMessage());
             }
         }
     }
@@ -125,9 +127,11 @@ public class ExcelToCSV {
     }
 
     public static void main(String [] args) {
+        String logFileName = String.format(".%sExcelToCSVJava.log",File.separator);
         Configurator.defaultConfig()
                 //.writer(new FileWriter(String.format(".%sExcelToCSVJava.log",File.separator)))
                 .writer(new ConsoleWriter())
+                .addWriter(new FileWriter(logFileName))
                 .level(Level.INFO)
                 .formatPattern("{date: HH:mm:ss.SSS} {level}: {message}")
                 .activate();
