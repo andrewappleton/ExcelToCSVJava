@@ -127,9 +127,11 @@ public class ExcelToCSV {
     }
 
     public static void main(String [] args) {
-        String logFileName = String.format(".%sExcelToCSVJava.log",File.separator);
+        String logFileName = String.format("%s%sExcelToCSVJava.log",
+                System.getProperty("user.dir"),
+                File.separator);
+        Logger.info(String.format("Writing log file to %s...",logFileName));
         Configurator.defaultConfig()
-                //.writer(new FileWriter(String.format(".%sExcelToCSVJava.log",File.separator)))
                 .writer(new ConsoleWriter())
                 .addWriter(new FileWriter(logFileName))
                 .level(Level.INFO)
